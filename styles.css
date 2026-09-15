@@ -94,12 +94,34 @@ section {
   height: 100svh;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 .hero-opening img {
   flex: 1;
   min-height: 0;
   width: 100%;
   object-fit: cover;
+}
+.hero-opening .hero-logo {
+  position: absolute;
+  top: 8%;
+  right: 6%;
+  width: min(30%, 320px);
+  text-align: center;
+  z-index: 2;
+}
+.hero-opening .hero-logo img {
+  flex: none;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.hero-opening .hero-logo-edition {
+  color: var(--paper);
+  font-weight: 800;
+  letter-spacing: 2px;
+  font-size: clamp(14px, 1.8vw, 22px);
+  margin-top: 8px;
 }
 .hero-opening .hero-band {
   flex: none;
