@@ -59,6 +59,26 @@ section {
   position:relative;
 }
 
+/* Reusable parallax utility: add class="parallax" to any image wrapper (a container with a single <img> child). A tiny helper script (bottom of body) copies the img's src to the wrapper's background-image, then background-attachment:fixed does the scroll effect — no per-instance CSS or extra markup needed. */
+.parallax {
+  background-position:center;
+  background-size:cover;
+  background-attachment:fixed;
+}
+.parallax img {
+  visibility:hidden;
+}
+@media (max-width:1024px) {
+  /* background-attachment:fixed is unreliable on touch devices (iOS Safari in particular); fall back to the plain image there */
+  .parallax {
+    background-image:none !important;
+    background-attachment:scroll;
+  }
+  .parallax img {
+    visibility:visible;
+  }
+}
+
 /* ---------- HERO ---------- */
 
 .hero {

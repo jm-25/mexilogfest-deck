@@ -30,7 +30,7 @@
 
 <!-- ABOUT -->
 <section id="about" class="split on-teal">
-  <div class="photo"><img src="assets/about-photo.jpg" alt="Mexi Log Fest surfers"></div>
+  <div class="photo parallax"><img src="assets/about-photo.jpg" alt="Mexi Log Fest surfers"></div>
   <div class="sep-v" style="left:45%; background:var(--teal);"></div>
   <div class="copy">
     <h2 class="display section-title">ABOUT<br>MEXI LOG FEST</h2>
@@ -369,6 +369,16 @@
     </div>
   </div>
 </section>
+
+<!-- Parallax utility: mirror each .parallax element's <img> src onto its own background-image, so CSS's background-attachment:fixed can drive the scroll effect -->
+<script>
+document.querySelectorAll('.parallax').forEach(function(el) {
+  var img = el.querySelector('img');
+  if (img && img.currentSrc) {
+    el.style.backgroundImage = 'url("' + img.currentSrc + '")';
+  }
+});
+</script>
 
 <!-- HERO BACKGROUND VIDEO: seamless loop via YouTube's JS API, driven explicitly from onReady so mute/play/loop don't depend on URL-parameter autoplay timing -->
 <script src="https://www.youtube.com/iframe_api"></script>
