@@ -99,11 +99,35 @@ section {
   position: relative;
   flex: 1;
   min-height: 0;
+  overflow: hidden;
 }
 .hero-opening .hero-photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+.hero-opening .hero-photo-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.hero-opening .hero-video-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
+}
+.hero-opening .hero-video-bg iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 177.78vh;
+  height: 56.25vw;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  border: 0;
 }
 .hero-opening .hero-logo {
   position: absolute;
