@@ -370,14 +370,39 @@
   </div>
 </section>
 
-<!-- Parallax utility: mirror each .parallax element's <img> src onto its own background-image, so CSS's background-attachment:fixed can drive the scroll effect -->
+<!-- Parallax utility: nudges each .parallax element's <img> up/down by a fraction of how far the section's center sits from the viewport's center, clamped so the oversized image never reveals its own edges -->
 <script>
-document.querySelectorAll('.parallax').forEach(function(el) {
-  var img = el.querySelector('img');
-  if (img && img.currentSrc) {
-    el.style.backgroundImage = 'url("' + img.currentSrc + '")';
+(function() {
+  var els = Array.prototype.slice.call(document.querySelectorAll('.parallax'));
+  if (!els.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+
+  var ticking = false;
+
+  function update() {
+    var viewportMid = window.innerHeight / 2;
+    els.forEach(function(el) {
+      var img = el.querySelector('img');
+      if (!img) { return; }
+      var rect = el.getBoundingClientRect();
+      var delta = (rect.top + rect.height / 2) - viewportMid;
+      var maxShift = rect.height * 0.15;
+      var offset = Math.max(-maxShift, Math.min(maxShift, delta * 0.15));
+      img.style.transform = 'translateY(' + offset.toFixed(1) + 'px)';
+    });
+    ticking = false;
   }
-});
+
+  function onScroll() {
+    if (!ticking) {
+      window.requestAnimationFrame(update);
+      ticking = true;
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+})();
 </script>
 
 <!-- HERO BACKGROUND VIDEO: seamless loop via YouTube's JS API, driven explicitly from onReady so mute/play/loop don't depend on URL-parameter autoplay timing -->
