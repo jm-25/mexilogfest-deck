@@ -390,7 +390,7 @@
       var total = viewportH + rect.height;
       var progress = (viewportH - rect.top) / total;
       progress = Math.max(0, Math.min(1, progress));
-      var maxShift = rect.height * 0.07;
+      var maxShift = rect.height * 0.03;
       var offset = progress * maxShift;
       img.style.transform = 'translateY(' + offset.toFixed(1) + 'px)';
     });
