@@ -206,7 +206,7 @@
 <!-- BEACH MARKET -->
 <section id="beach-market" class="fa-full">
   <div class="top sep-bottom"><h2 class="display section-title">BEACH MARKET</h2><p>Merchants offering fresh foods, crafts &amp; specialty items</p></div>
-  <div class="photo bg-fixed-wrap" role="img" aria-label="Beach Market"><div class="bg-fixed" style="background-image:url('assets/act-beach-market.jpg');"></div></div>
+  <div class="photo bg-fixed-wrap" role="img" aria-label="Beach Market"><div class="bg-fixed" data-align="bottom" style="background-image:url('assets/act-beach-market.jpg');"></div></div>
 </section>
 
 <!-- PARTNERSHIP -->
@@ -373,11 +373,11 @@
   </div>
 </section>
 
-<!-- Background-fixed utility: nudges background-position-y for sections using .bg-fixed-wrap > .bg-fixed, adding dynamism on top of the fixed background-attachment. The inner .bg-fixed is oversized (130%) so there's real room for the shift to be visible without ever revealing an edge. -->
+<!-- Background-fixed utility: nudges background-position-y for sections using .bg-fixed-wrap > .bg-fixed, giving a near-fixed drift. Sized/positioned relative to the element itself (not the viewport) so the effect and any data-align bias are reliable everywhere. The inner .bg-fixed is oversized (130%) so there's real room for the shift to be visible without ever revealing an edge. -->
 <script>
 (function() {
   var wraps = Array.prototype.slice.call(document.querySelectorAll('.bg-fixed-wrap'));
-  if (!wraps.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.matchMedia('(max-width: 1024px)').matches) { return; }
+  if (!wraps.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
 
   var ticking = false;
 
@@ -390,7 +390,9 @@
       var total = viewportH + rect.height;
       var progress = (viewportH - rect.top) / total;
       progress = Math.max(0, Math.min(1, progress));
-      var pos = 10 + progress * 80;
+      var pos = el.getAttribute('data-align') === 'bottom'
+        ? 60 + progress * 40
+        : 10 + progress * 80;
       el.style.backgroundPositionY = pos.toFixed(1) + '%';
     });
     ticking = false;

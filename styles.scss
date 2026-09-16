@@ -989,7 +989,7 @@ section {
 
 
 /* ---------- BACKGROUND-FIXED UTILITY ---------- */
-/* True fixed-background parallax: the image stays pinned to the viewport (via background-attachment:fixed) while its section scrolls past, like a classic Divi/Squarespace parallax banner. .bg-fixed-wrap clips at the natural box size; the actual .bg-fixed child is oversized (130%) so JS has real room to nudge background-position-y without ever revealing an edge — some source photos are cropped too close to their box for the movement to read otherwise. Mobile Safari doesn't support fixed backgrounds reliably, so it falls back to a normal scrolling background there. */
+/* Near-fixed background parallax: sized and positioned relative to its OWN element (not the viewport), so the crop/alignment is fully controllable per image. .bg-fixed-wrap clips at the natural box size; the actual .bg-fixed child is oversized (130%) so JS has real room to nudge background-position-y without ever revealing an edge. data-align="bottom" biases the crop toward the bottom of the source photo for images where the top is less important. */
 .bg-fixed-wrap {
   position:relative !important;
   overflow:hidden !important;
@@ -1002,13 +1002,17 @@ section {
   bottom:-15% !important;
   background-size:cover !important;
   background-position:center 50%;
-  background-attachment:fixed !important;
   background-repeat:no-repeat !important;
 }
-@media (max-width:1024px), (prefers-reduced-motion:reduce) {
+.bg-fixed[data-align="bottom"] {
+  background-position:center 100%;
+}
+@media (prefers-reduced-motion:reduce) {
   .bg-fixed {
-    background-attachment:scroll !important;
     background-position:center !important;
+  }
+  .bg-fixed[data-align="bottom"] {
+    background-position:center bottom !important;
   }
 }
 
