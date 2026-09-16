@@ -382,14 +382,16 @@
   var ticking = false;
 
   function update() {
-    var viewportMid = window.innerHeight / 2;
+    var viewportH = window.innerHeight;
     els.forEach(function(el) {
       var img = el.querySelector('img');
       if (!img) { return; }
       var rect = el.getBoundingClientRect();
-      var delta = (rect.top + rect.height / 2) - viewportMid;
-      var maxShift = rect.height * 0.15;
-      var offset = Math.max(-maxShift, Math.min(maxShift, delta * 0.15));
+      var total = viewportH + rect.height;
+      var progress = (viewportH - rect.top) / total;
+      progress = Math.max(0, Math.min(1, progress));
+      var maxShift = rect.height * 0.07;
+      var offset = progress * maxShift;
       img.style.transform = 'translateY(' + offset.toFixed(1) + 'px)';
     });
     ticking = false;
