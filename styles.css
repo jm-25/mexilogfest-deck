@@ -957,5 +957,31 @@ section {
     transform: none !important;
   }
 }
+/* ---------- SLIDESHOW UTILITY ---------- */
+/* Add class="slideshow" to a .photo wrapper holding 2+ <img> children; JS toggles .active on an interval to crossfade between them. Kept last so it overrides earlier .photo img sizing rules. */
+.slideshow {
+  position: relative !important;
+}
 
-/*# sourceMappingURL=compiled_check.css.map */
+.slideshow img {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.slideshow img.active {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slideshow img {
+    transition: none;
+  }
+}
+
+/*# sourceMappingURL=styles.css.map */

@@ -218,7 +218,10 @@
 
 <!-- SAYULITA -->
 <section id="sayulita" class="split reverse on-purple">
-  <div class="photo"><img src="assets/sayulita-photo.jpg" alt="Sayulita coastline"></div>
+  <div class="photo slideshow" id="sayulitaSlideshow">
+    <img src="assets/sayulita-drone-1.jpg" alt="Sayulita aerial coastline" class="active">
+    <img src="assets/sayulita-drone-2.jpg" alt="Sayulita aerial coastline">
+  </div>
   <div class="sep-v" style="left:55%; background:var(--purple);"></div>
   <div class="copy">
     <h2 class="display section-title" style="color:var(--yellow);">SAYULITA</h2>
@@ -402,6 +405,22 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
   update();
+})();
+</script>
+
+<!-- SAYULITA slideshow: crossfades between two images on an interval -->
+<script>
+(function(){
+  var slideshow = document.getElementById('sayulitaSlideshow');
+  if (!slideshow) return;
+  var imgs = slideshow.querySelectorAll('img');
+  if (imgs.length < 2) return;
+  var i = 0;
+  setInterval(function(){
+    imgs[i].classList.remove('active');
+    i = (i + 1) % imgs.length;
+    imgs[i].classList.add('active');
+  }, 5000);
 })();
 </script>
 
