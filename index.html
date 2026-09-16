@@ -390,8 +390,8 @@
       var progress = (viewportH - rect.top) / total;
       progress = Math.max(0, Math.min(1, progress));
       var pos = el.getAttribute('data-align') === 'bottom'
-        ? 60 + progress * 40
-        : 10 + progress * 80;
+        ? 92 + progress * 8
+        : 44 + progress * 12;
       el.style.backgroundPositionY = pos.toFixed(1) + '%';
     });
     ticking = false;
