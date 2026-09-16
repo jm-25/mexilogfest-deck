@@ -333,6 +333,7 @@ section {
 @media (max-width:640px) {
   .vh-grid {
     column-count:1;
+    text-align:center;
   }
 }
 
@@ -378,6 +379,7 @@ section {
   grid-template-columns:repeat(3,1fr);
   gap:24px;
   margin-bottom:36px;
+  margin-top:36px;
 }
 
 .stat {
@@ -403,6 +405,9 @@ section {
   }
   .stat-row {
     grid-template-columns:1fr 1fr;
+    .stat:last-child {
+      grid-column:1 / -1;
+    }
   }
 }
 
@@ -462,6 +467,7 @@ section {
 @media (max-width:640px) {
   .infl-grid {
     column-count:1;
+    text-align:center;
   }
 }
 
@@ -545,6 +551,13 @@ section {
   }
   .press-grid {
     column-count:1;
+    text-align:center;
+    p {
+      padding-left:0;
+    }
+    p::before {
+      content:none;
+    }
   }
 }
 
@@ -921,7 +934,7 @@ section {
 }
 
 .sp-footer {
-  margin-top:24px;
+  margin-top:35px;
   margin-bottom:0;
   width:100vw;
   margin-left:calc(50% - 50vw);
@@ -949,6 +962,7 @@ section {
 @media (max-width:640px) {
   .sp-footer {
     flex-direction:column;
+    align-items:center;
     padding:20px 24px;
     row-gap:4px;
     .label {
@@ -1025,6 +1039,9 @@ section {
 @media (max-width:640px) {
   .contact-grid {
     grid-template-columns:1fr;
+  }
+  .contact-card {
+    text-align:center;
   }
 }
 
