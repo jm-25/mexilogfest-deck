@@ -521,10 +521,13 @@ section {
   display: flex;
   flex-direction: column;
 }
-.fa-banner img {
+.fa-banner .photo {
   flex: 1;
   min-height: 0;
+}
+.fa-banner img {
   width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 .fa-banner .band {
