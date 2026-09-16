@@ -30,7 +30,7 @@
 
 <!-- ABOUT -->
 <section id="about" class="split on-teal">
-  <div class="photo parallax"><img src="assets/about-photo.jpg" alt="Mexi Log Fest surfers"></div>
+  <div class="photo"><img src="assets/about-photo.jpg" alt="Mexi Log Fest surfers"></div>
   <div class="sep-v" style="left:45%; background:var(--teal);"></div>
   <div class="copy">
     <h2 class="display section-title">ABOUT<br>MEXI LOG FEST</h2>
@@ -84,7 +84,7 @@
 
 <!-- SOCIAL STATS -->
 <section id="social-stats" class="stats">
-  <div class="photo parallax"><img src="assets/social-stats-photo.jpg" alt="Surfer riding a wave"></div>
+  <div class="photo"><img src="assets/social-stats-photo.jpg" alt="Surfer riding a wave"></div>
   <div class="col">
     <div class="title-band"><h2 class="display section-title">SOCIAL STATS</h2></div>
     <div class="panel sep-top">
@@ -134,7 +134,7 @@
 
 <!-- PRESS HIGHLIGHTS -->
 <section id="press-highlights" class="press">
-  <div class="photo parallax"><img src="assets/press-photo.jpg" alt="Surfer on a wave"></div>
+  <div class="photo"><img src="assets/press-photo.jpg" alt="Surfer on a wave"></div>
   <div class="col">
     <div class="title-band sep-bottom"><h2 class="display section-title">PRESS HIGHLIGHTS</h2></div>
     <div class="panel">
@@ -372,41 +372,6 @@
     </div>
   </div>
 </section>
-
-<!-- Parallax utility: nudges each .parallax element's <img> up/down by a fraction of how far the section's center sits from the viewport's center, clamped so the oversized image never reveals its own edges -->
-<script>
-(function() {
-  var els = Array.prototype.slice.call(document.querySelectorAll('.parallax'));
-  if (!els.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
-
-  var ticking = false;
-
-  function update() {
-    var viewportMid = window.innerHeight / 2;
-    els.forEach(function(el) {
-      var img = el.querySelector('img');
-      if (!img) { return; }
-      var rect = el.getBoundingClientRect();
-      var delta = (rect.top + rect.height / 2) - viewportMid;
-      var maxShift = rect.height * 0.15;
-      var offset = Math.max(-maxShift, Math.min(maxShift, delta * 0.15));
-      img.style.transform = 'translateY(' + offset.toFixed(1) + 'px)';
-    });
-    ticking = false;
-  }
-
-  function onScroll() {
-    if (!ticking) {
-      window.requestAnimationFrame(update);
-      ticking = true;
-    }
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
-  update();
-})();
-</script>
 
 <!-- Background-fixed utility: nudges background-position-y a few percent for sections using .bg-fixed, adding slight dynamism on top of the fixed background-attachment -->
 <script>

@@ -945,30 +945,6 @@ section {
   justify-content: center;
 }
 
-/* ---------- PARALLAX UTILITY ---------- */
-/* Add class="parallax" to any image wrapper (a container with a single <img> child). Kept last in the file so it reliably overrides any earlier, more-specific ".foo .photo img"-style rule. The image is sized taller than its own container and nudged up/down by a scroll-driven transform (script near the end of body), so it always covers the section itself (not the viewport) while drifting gently as you scroll past it. */
-.parallax {
-  position: relative !important;
-  overflow: hidden !important;
-}
-
-.parallax img {
-  position: absolute !important;
-  left: 0 !important;
-  top: -15% !important;
-  width: 100% !important;
-  height: 130% !important;
-  object-fit: cover !important;
-  will-change: transform;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .parallax img {
-    top: 0 !important;
-    height: 100% !important;
-    transform: none !important;
-  }
-}
 /* ---------- BACKGROUND-FIXED UTILITY ---------- */
 /* True fixed-background parallax: the image stays pinned to the viewport (via background-attachment:fixed) while its section scrolls past, like a classic Divi/Squarespace parallax banner. JS nudges background-position-y a few percent for a touch of dynamism on top of the fixed base. Mobile Safari doesn't support fixed backgrounds reliably, so it falls back to a normal scrolling background there. */
 .bg-fixed {
