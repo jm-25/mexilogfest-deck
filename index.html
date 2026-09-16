@@ -390,7 +390,7 @@
       var total = viewportH + rect.height;
       var progress = (viewportH - rect.top) / total;
       progress = Math.max(0, Math.min(1, progress));
-      var pos = 30 + progress * 40;
+      var pos = 10 + progress * 80;
       el.style.backgroundPositionY = pos.toFixed(1) + '%';
     });
     ticking = false;
