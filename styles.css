@@ -72,6 +72,12 @@ section {
   object-fit: cover;
 }
 
+.group-photo-bg {
+  width: 100%;
+  aspect-ratio: 1600/1067;
+  max-height: 100vh;
+}
+
 .hero-band {
   background: var(--purple);
   color: var(--paper);
@@ -659,10 +665,13 @@ section {
 .fa-full .top p {
   color: var(--yellow);
 }
-.fa-full img {
+.fa-full .photo {
   flex: 1;
   min-height: 0;
+}
+.fa-full img {
   width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 

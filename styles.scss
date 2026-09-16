@@ -73,6 +73,12 @@ section {
   }
 }
 
+.group-photo-bg {
+  width:100%;
+  aspect-ratio:1600/1067;
+  max-height:100vh;
+}
+
 .hero-band {
   background:var(--purple);
   color:var(--paper);
@@ -686,10 +692,13 @@ section {
   .top p {
     color:var(--yellow);
   }
-  img {
+  .photo {
     flex:1;
     min-height:0;
+  }
+  img {
     width:100%;
+    height:100%;
     object-fit:cover;
   }
 }
