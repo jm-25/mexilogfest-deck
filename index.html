@@ -376,23 +376,55 @@
 <script>
 (function() {
   var wraps = Array.prototype.slice.call(document.querySelectorAll('.bg-fixed-wrap'));
-  if (!wraps.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+  var desktopQuery = window.matchMedia('(min-width:1025px)');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!wraps.length || reduceMotion.matches) { return; }
+
+  var OVERSIZE = 1.3; // extra room beyond viewport-cover so the position drift never reveals an edge
+
+  var items = wraps.map(function(wrap) {
+    var el = wrap.querySelector('.bg-fixed');
+    if (!el) { return null; }
+    var url = (el.style.backgroundImage.match(/url\(["']?(.*?)["']?\)/) || [])[1];
+    var entry = { wrap: wrap, el: el, natural: null };
+    if (url) {
+      var img = new Image();
+      img.onload = function() {
+        entry.natural = { w: img.naturalWidth, h: img.naturalHeight };
+        sizeOne(entry);
+      };
+      img.src = url;
+    }
+    return entry;
+  }).filter(Boolean);
+
+  function sizeOne(entry) {
+    if (!desktopQuery.matches || !entry.natural) { return; }
+    var scale = Math.max(window.innerWidth / entry.natural.w, window.innerHeight / entry.natural.h) * OVERSIZE;
+    var w = Math.ceil(entry.natural.w * scale);
+    var h = Math.ceil(entry.natural.h * scale);
+    entry.el.style.backgroundSize = w + 'px ' + h + 'px';
+  }
+
+  function resizeAll() {
+    items.forEach(function(entry) {
+      if (entry.natural) { sizeOne(entry); }
+    });
+  }
 
   var ticking = false;
 
   function update() {
     var viewportH = window.innerHeight;
-    wraps.forEach(function(wrap) {
-      var el = wrap.querySelector('.bg-fixed');
-      if (!el) { return; }
-      var rect = wrap.getBoundingClientRect();
+    items.forEach(function(entry) {
+      var rect = entry.wrap.getBoundingClientRect();
       var total = viewportH + rect.height;
       var progress = (viewportH - rect.top) / total;
       progress = Math.max(0, Math.min(1, progress));
-      var pos = el.getAttribute('data-align') === 'bottom'
+      var pos = entry.el.getAttribute('data-align') === 'bottom'
         ? 92 + progress * 8
         : 44 + progress * 12;
-      el.style.backgroundPositionY = pos.toFixed(1) + '%';
+      entry.el.style.backgroundPositionY = pos.toFixed(1) + '%';
     });
     ticking = false;
   }
@@ -405,7 +437,8 @@
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
+  window.addEventListener('resize', function() { resizeAll(); onScroll(); });
+  resizeAll();
   update();
 })();
 </script>
