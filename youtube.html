@@ -61,32 +61,40 @@
   </div>
 </section>
 
-<!-- HERO BACKGROUND VIDEO: settle-gated reveal. See the .hero-video-bg comment above for why. -->
+<!-- HERO BACKGROUND VIDEO: reveal timing is driven by fixed timers tied to actions WE take
+     (page load, visibilitychange), not by waiting for the JS API's onStateChange to confirm
+     PLAYING first. Verified via testing: that postMessage-based event bridge is NOT reliable
+     — in one trial the video was confirmed playing (via YouTube's own analytics ping,
+     12+ seconds in) while onStateChange never fired at all in our page. Gating visibility on
+     an event that can silently never arrive would leave the video hidden forever in that case,
+     which is worse than the flash we're trying to fix. So: hide immediately when we know we
+     just triggered a (re)start (load, tab refocus), reveal unconditionally after a fixed delay
+     chosen from the measured chrome-fade time, regardless of what events do or don't fire. -->
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 function onYouTubeIframeAPIReady() {
   var wrap = document.querySelector('.hero-video-bg');
-  var SETTLE_MS = 5000;
-  var settleTimer = null;
+  var INITIAL_SETTLE_MS = 5500;  // cold load: full YT intro chrome (title/branding/big button)
+  var RESUME_SETTLE_MS = 2500;   // resume after tab refocus: player already warm, less chrome expected (unverified — being conservative)
+  var revealTimer = null;
 
   function log(msg) {
     if (window.console) { console.log('[yt-sandbox] ' + msg); }
   }
 
-  function armSettle() {
-    clearTimeout(settleTimer);
-    log('armSettle: hiding, waiting ' + SETTLE_MS + 'ms');
-    if (wrap) { wrap.classList.remove('is-settled'); }
-    settleTimer = setTimeout(function() {
-      log('settle timer fired -> revealing');
-      if (wrap) { wrap.classList.add('is-settled'); }
-    }, SETTLE_MS);
-  }
-
   function hideNow(reason) {
-    clearTimeout(settleTimer);
+    clearTimeout(revealTimer);
     log('hideNow: ' + reason);
     if (wrap) { wrap.classList.remove('is-settled'); }
+  }
+
+  function scheduleReveal(ms, reason) {
+    clearTimeout(revealTimer);
+    log('scheduleReveal(' + ms + 'ms): ' + reason);
+    revealTimer = setTimeout(function() {
+      log('reveal timer fired -> revealing');
+      if (wrap) { wrap.classList.add('is-settled'); }
+    }, ms);
   }
 
   var player = new YT.Player('heroVideoPlayer', {
@@ -94,15 +102,12 @@ function onYouTubeIframeAPIReady() {
       onReady: function(e) {
         e.target.mute();
         e.target.playVideo();
+        scheduleReveal(INITIAL_SETTLE_MS, 'initial load');
       },
       onStateChange: function(e) {
         var state = e.data;
         log('state change: ' + state);
-        if (state === YT.PlayerState.PLAYING) {
-          armSettle();
-        } else {
-          hideNow('state=' + state);
-        }
+        // Not used to gate visibility (see comment above) — only for the loop restart.
         if (state === YT.PlayerState.ENDED) {
           e.target.seekTo(0);
           e.target.playVideo();
@@ -117,6 +122,7 @@ function onYouTubeIframeAPIReady() {
     } else if (player && typeof player.playVideo === 'function') {
       log('tab visible again -> playVideo()');
       player.playVideo();
+      scheduleReveal(RESUME_SETTLE_MS, 'tab refocus resume');
     }
   });
 }
