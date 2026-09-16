@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YouTube background test</title>
+<link rel="stylesheet" href="https://use.typekit.net/osq0svq.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* Sandbox-only helpers, not part of the production page */
+  body { background:#111; }
+  .sandbox-note {
+    max-width:900px;
+    margin:24px auto;
+    padding:16px 20px;
+    background:#fff3cd;
+    border:1px solid #e0c26b;
+    border-radius:8px;
+    font-family:system-ui,sans-serif;
+    font-size:14px;
+    line-height:1.5;
+  }
+  .sandbox-note code { background:#00000010; padding:1px 5px; border-radius:4px; }
+</style>
+</head>
+<body>
+
+<div class="sandbox-note">
+  <strong>Isolated test page</strong> — only the hero/opening section, for iterating on the YouTube background-video pause-icon issue without touching the live homepage. Not linked from the site nav; safe to break. Edit <code>youtube.html</code> directly, <code>git push</code>, reload here.
+</div>
+
+<!-- HERO -->
+<section id="hero" class="hero hero-opening">
+  <div class="hero-photo">
+    <img src="assets/hero-cover.jpg" alt="Mexi Log Fest 2027" class="hero-photo-fallback">
+    <div class="hero-video-bg">
+      <iframe id="heroVideoPlayer" src="https://www.youtube.com/embed/oqEB0J028S4?enablejsapi=1&amp;origin=https://deck.mexilogfest.com&amp;autoplay=1&amp;mute=1&amp;controls=0&amp;showinfo=0&amp;rel=0&amp;modestbranding=1&amp;iv_load_policy=3&amp;disablekb=1&amp;playsinline=1&amp;fs=0" title="Mexi Log Fest background video" frameborder="0" allow="autoplay"></iframe>
+    </div>
+    <div class="hero-logo">
+      <img src="assets/mxlf-logo.png" alt="Mexi Log Fest">
+      <div class="hero-logo-edition futura">12th EDITION</div>
+    </div>
+  </div>
+  <div class="hero-band sep-top">
+    <h1 class="display">SURF &amp; LIFESTYLE FESTIVAL</h1>
+    <div class="sub futura">Sayulita, Nayarit &middot; May 8&ndash;15, 2027</div>
+  </div>
+</section>
+
+<!-- HERO BACKGROUND VIDEO: seamless loop via YouTube's JS API, driven explicitly from onReady so mute/play/loop don't depend on URL-parameter autoplay timing -->
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+function onYouTubeIframeAPIReady() {
+  new YT.Player('heroVideoPlayer', {
+    events: {
+      onReady: function(e) {
+        e.target.mute();
+        e.target.playVideo();
+      },
+      onStateChange: function(e) {
+        if (e.data === YT.PlayerState.ENDED) {
+          e.target.seekTo(0);
+          e.target.playVideo();
+        }
+      }
+    }
+  });
+}
+</script>
+
+</body>
+</html>
