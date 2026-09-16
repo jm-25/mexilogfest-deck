@@ -863,7 +863,6 @@ section {
   letter-spacing: 0.4px;
   text-transform: uppercase;
   cursor: pointer;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .sp-toggle:hover,
@@ -877,6 +876,7 @@ section {
 
 .sp-footer {
   margin-top: 50px;
+  margin-bottom: 50px;
   width: 100vw;
   margin-left: calc(50% - 50vw);
   background: var(--pink);
