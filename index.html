@@ -576,15 +576,27 @@
 })();
 </script>
 
-<!-- HERO BACKGROUND VIDEO: the iframe stays invisible (opacity:0, .hero-photo-fallback shows through underneath) until the player reports PLAYING, and hides again if it ever leaves PLAYING (buffering, paused, cued, ended-before-restart) — so no native YouTube UI (the big center play/pause button, or anything else) can ever be seen flashing, no matter what triggers it: initial load race, background-tab throttling, or the loop restart. A visibilitychange listener also force-resumes playback when the tab regains focus, so it doesn't sit paused indefinitely. -->
+<!-- HERO BACKGROUND VIDEO: the iframe stays invisible (opacity:0, .hero-photo-fallback shows through underneath) until BOTH: (a) the player reports PLAYING, and (b) a fixed 5s settle timer has elapsed. (b) exists because YouTube's own intro chrome — title, big pause button, channel branding, "Watch on YouTube" — stays visible on top of the video for a few seconds AFTER the PLAYING event already fires; revealing on PLAYING alone (tested) still caught that window. Measured on the real deployed video: chrome was still visible at 3.7s, gone by 5.6s, so 5s is the reveal floor with a little margin. This only gates the very first reveal — once shown, it stays shown (loop restarts don't re-hide it). -->
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 function onYouTubeIframeAPIReady() {
   var wrap = document.querySelector('.hero-video-bg');
+  var chromeSettled = false;
+  var isPlaying = false;
+  var revealed = false;
 
-  function setPlaying(isPlaying) {
-    if (wrap) { wrap.classList.toggle('is-playing', isPlaying); }
+  function maybeReveal() {
+    if (revealed || !wrap) { return; }
+    if (chromeSettled && isPlaying) {
+      wrap.classList.add('is-playing');
+      revealed = true;
+    }
   }
+
+  setTimeout(function() {
+    chromeSettled = true;
+    maybeReveal();
+  }, 5000);
 
   var player = new YT.Player('heroVideoPlayer', {
     events: {
@@ -593,7 +605,8 @@ function onYouTubeIframeAPIReady() {
         e.target.playVideo();
       },
       onStateChange: function(e) {
-        setPlaying(e.data === YT.PlayerState.PLAYING);
+        isPlaying = (e.data === YT.PlayerState.PLAYING);
+        if (isPlaying) { maybeReveal(); }
         if (e.data === YT.PlayerState.ENDED) {
           e.target.seekTo(0);
           e.target.playVideo();
