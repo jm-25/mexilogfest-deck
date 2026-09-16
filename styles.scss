@@ -391,7 +391,6 @@ section {
   .label {
     color:var(--yellow);
     font-weight:800;
-    font-size:14px;
     margin-top:6px;
   }
 }
@@ -598,18 +597,19 @@ section {
 
 .fa-card {
   background:var(--cream);
+  .top, .bottom{
+    padding:50px 20px;
+    text-align:center;
+  }
   .top {
     background:var(--teal);
     color:var(--yellow);
-    text-align:center;
-    padding:28px 20px;
-    min-height:130px;
     display:flex;
     flex-direction:column;
     justify-content:center;
   }
-  .top h3 {
-    font-size:26px;
+   h3 {
+    font-size:36px;
   }
   .top p {
     color:var(--paper);
@@ -618,16 +618,14 @@ section {
   }
   img {
     width:100%;
-    aspect-ratio:3/4;
+    aspect-ratio:1/1;
     object-fit:cover;
   }
   .bottom {
     background:var(--cream);
-    padding:24px 20px;
     text-align:center;
   }
   .bottom h3 {
-    font-size:24px;
     color:var(--ink);
   }
   .bottom p {
@@ -675,7 +673,6 @@ section {
     flex:1;
     width:100%;
     height:100%;
-    aspect-ratio:auto;
     object-fit:cover;
   }
 }
@@ -856,7 +853,6 @@ section {
   background:var(--teal);
   color:var(--paper);
   font-weight:800;
-  font-size:13px;
   padding:10px 12px;
   min-height:40px;
   display:flex;
@@ -1026,7 +1022,6 @@ section {
     margin:6px 0 18px;
   }
   .field-label {
-    font-size:12px;
     font-weight:800;
     letter-spacing:1px;
     text-transform:uppercase;
