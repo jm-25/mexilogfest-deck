@@ -160,7 +160,7 @@
 
 <!-- FESTIVAL ACTIVITIES -->
 <section id="festival-activities" class="fa-banner">
-  <div class="photo parallax-fixed"><img src="assets/festival-banner.jpg" alt="Festival crew"></div>
+  <div class="photo bg-fixed" style="background-image:url('assets/festival-banner.jpg');" role="img" aria-label="Festival crew"></div>
   <div class="band sep-top"><h2 class="display section-title">FESTIVAL ACTIVITIES</h2></div>
 </section>
 <section class="fa-grid">
@@ -408,26 +408,23 @@
 })();
 </script>
 
-<!-- Parallax-fixed utility: near-static drift (closer to position:fixed) for sections using .parallax-fixed instead of .parallax -->
+<!-- Background-fixed utility: nudges background-position-y a few percent for sections using .bg-fixed, adding slight dynamism on top of the fixed background-attachment -->
 <script>
 (function() {
-  var els = Array.prototype.slice.call(document.querySelectorAll('.parallax-fixed'));
-  if (!els.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+  var els = Array.prototype.slice.call(document.querySelectorAll('.bg-fixed'));
+  if (!els.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.matchMedia('(max-width: 1024px)').matches) { return; }
 
   var ticking = false;
 
   function update() {
     var viewportH = window.innerHeight;
     els.forEach(function(el) {
-      var img = el.querySelector('img');
-      if (!img) { return; }
       var rect = el.getBoundingClientRect();
       var total = viewportH + rect.height;
       var progress = (viewportH - rect.top) / total;
       progress = Math.max(0, Math.min(1, progress));
-      var maxShift = rect.height * 0.04;
-      var offset = progress * maxShift;
-      img.style.transform = 'translateY(' + offset.toFixed(1) + 'px)';
+      var pos = 46 + progress * 8;
+      el.style.backgroundPositionY = pos.toFixed(1) + '%';
     });
     ticking = false;
   }
