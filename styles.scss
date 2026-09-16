@@ -124,11 +124,6 @@ section {
     overflow:hidden;
     z-index:1;
     pointer-events:none;
-    opacity:0;
-    transition:opacity .5s ease;
-    &.is-settled {
-      opacity:1;
-    }
     iframe {
       position:absolute;
       top:50%;
