@@ -451,7 +451,7 @@
 })();
 </script>
 
-<!-- SAYULITA slideshow: crossfades between images on an interval, with arrow-click and touch-swipe navigation that resets the timer -->
+<!-- SAYULITA slideshow: slides horizontally between images on an interval, with arrow-click and touch-swipe navigation that resets the timer -->
 <script>
 (function(){
   var slideshow = document.getElementById('sayulitaSlideshow');
@@ -461,10 +461,16 @@
   var i = 0;
   var timer;
 
+  function layout() {
+    imgs.forEach(function(img, j) {
+      img.style.transform = 'translateX(' + ((j - i) * 100) + '%)';
+    });
+  }
+  layout();
+
   function show(next) {
-    imgs[i].classList.remove('active');
     i = (next + imgs.length) % imgs.length;
-    imgs[i].classList.add('active');
+    layout();
   }
 
   function restart() {

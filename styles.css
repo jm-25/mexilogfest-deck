@@ -1033,9 +1033,10 @@ section {
   }
 }
 /* ---------- SLIDESHOW UTILITY ---------- */
-/* Add class="slideshow" to a .photo wrapper holding 2+ <img> children; JS toggles .active on an interval to crossfade between them. Kept last so it overrides earlier .photo img sizing rules. */
+/* Add class="slideshow" to a .photo wrapper holding 2+ <img> children; JS slides them horizontally (transform:translateX, set inline per-image) on an interval or via the arrows/swipe. Kept last so it overrides earlier .photo img sizing rules. */
 .slideshow {
   position: relative !important;
+  overflow: hidden !important;
 }
 
 .slideshow img {
@@ -1045,12 +1046,7 @@ section {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
-  opacity: 0;
-  transition: opacity 1.2s ease;
-}
-
-.slideshow img.active {
-  opacity: 1;
+  transition: transform 0.6s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
