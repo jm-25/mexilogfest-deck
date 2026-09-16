@@ -32,7 +32,7 @@
   <div class="hero-photo">
     <img src="assets/hero-cover.jpg" alt="Mexi Log Fest 2027" class="hero-photo-fallback">
     <div class="hero-video-bg">
-      <iframe id="heroVideoPlayer" src="https://www.youtube.com/embed/oqEB0J028S4?enablejsapi=1&amp;origin=https://deck.mexilogfest.com&amp;autoplay=1&amp;mute=1&amp;controls=0&amp;showinfo=0&amp;rel=0&amp;modestbranding=1&amp;iv_load_policy=3&amp;disablekb=1&amp;playsinline=1&amp;fs=0" title="Mexi Log Fest background video" frameborder="0" allow="autoplay"></iframe>
+      <iframe id="heroVideoPlayer" src="https://www.youtube.com/embed/oqEB0J028S4?enablejsapi=1&amp;origin=https://deck.mexilogfest.com&amp;autoplay=1&amp;mute=1&amp;controls=0&amp;showinfo=0&amp;rel=0&amp;modestbranding=1&amp;iv_load_policy=3&amp;disablekb=1&amp;playsinline=1&amp;fs=0&amp;loop=1&amp;playlist=oqEB0J028S4" title="Mexi Log Fest background video" frameborder="0" allow="autoplay"></iframe>
     </div>
     <div class="hero-logo">
       <img src="assets/mxlf-logo.png" alt="Mexi Log Fest">
@@ -184,7 +184,7 @@
   </div>
   <div class="fa-card header-top">
     <div class="top sep-bottom"><h3 class="display">YOGA</h3><p>Rise and shine with a daily yoga session.</p></div>
-    <img src="assets/act-yoga.jpg" alt="Yoga">
+    <img src="assets/act-yoga.jpg" style="object-position: bottom" alt="Yoga">
   </div>
   <div class="fa-card caption-bottom">
     <a class="video-link" href="https://www.instagram.com/reel/DJ9kRHaJpY_/" target="_blank" rel="noopener" aria-label="Watch Para-Surf video"><img src="assets/act-para-surf.jpg" alt="Para-Surf"><span class="play-icon"><svg viewBox="0 0 64 64" width="56" height="56" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="rgba(0,0,0,.35)" stroke="#fff" stroke-width="3"/><polygon points="26,20 26,44 46,32" fill="#fff"/></svg></span></a>
@@ -576,7 +576,7 @@
 })();
 </script>
 
-<!-- HERO BACKGROUND VIDEO: seamless loop via YouTube's JS API, driven explicitly from onReady so mute/play/loop don't depend on URL-parameter autoplay timing -->
+<!-- HERO BACKGROUND VIDEO: loop=1&playlist=<id> in the iframe URL lets YouTube handle the seamless loop natively (no manual seekTo/playVideo restart, which used to flash YouTube's native pause icon on every loop). JS API is only used to force mute/play from onReady so it doesn't depend on URL-parameter autoplay timing. -->
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 function onYouTubeIframeAPIReady() {
@@ -585,12 +585,6 @@ function onYouTubeIframeAPIReady() {
       onReady: function(e) {
         e.target.mute();
         e.target.playVideo();
-      },
-      onStateChange: function(e) {
-        if (e.data === YT.PlayerState.ENDED) {
-          e.target.seekTo(0);
-          e.target.playVideo();
-        }
       }
     }
   });
