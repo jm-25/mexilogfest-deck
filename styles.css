@@ -124,6 +124,11 @@ section {
   overflow: hidden;
   z-index: 1;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.hero-opening .hero-video-bg.is-playing {
+  opacity: 1;
 }
 .hero-opening .hero-video-bg iframe {
   position: absolute;
@@ -1144,3 +1149,5 @@ section {
     height: 36px;
   }
 }
+
+/*# sourceMappingURL=styles.css.map */

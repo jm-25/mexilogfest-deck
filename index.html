@@ -576,10 +576,16 @@
 })();
 </script>
 
-<!-- HERO BACKGROUND VIDEO: seamless loop via YouTube's JS API, driven explicitly from onReady so mute/play/loop don't depend on URL-parameter autoplay timing. (Tried loop=1&playlist=<id> to avoid the manual restart, but that switches the embed into playlist mode, which shows a prev/pause/next cluster overlay unconditionally — worse than the brief pause-icon flash from the manual restart. Reverted.) Chrome throttles/pauses background-tab video, which leaves the iframe sitting in a genuinely paused state (showing YouTube's own paused-state UI, unrelated to pointer-events) until something resumes it — a visibilitychange listener re-plays it as soon as the tab is focused again. -->
+<!-- HERO BACKGROUND VIDEO: the iframe stays invisible (opacity:0, .hero-photo-fallback shows through underneath) until the player reports PLAYING, and hides again if it ever leaves PLAYING (buffering, paused, cued, ended-before-restart) — so no native YouTube UI (the big center play/pause button, or anything else) can ever be seen flashing, no matter what triggers it: initial load race, background-tab throttling, or the loop restart. A visibilitychange listener also force-resumes playback when the tab regains focus, so it doesn't sit paused indefinitely. -->
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 function onYouTubeIframeAPIReady() {
+  var wrap = document.querySelector('.hero-video-bg');
+
+  function setPlaying(isPlaying) {
+    if (wrap) { wrap.classList.toggle('is-playing', isPlaying); }
+  }
+
   var player = new YT.Player('heroVideoPlayer', {
     events: {
       onReady: function(e) {
@@ -587,6 +593,7 @@ function onYouTubeIframeAPIReady() {
         e.target.playVideo();
       },
       onStateChange: function(e) {
+        setPlaying(e.data === YT.PlayerState.PLAYING);
         if (e.data === YT.PlayerState.ENDED) {
           e.target.seekTo(0);
           e.target.playVideo();
