@@ -1,3 +1,4 @@
+@charset "UTF-8";
 :root {
   --cream:#F5EFDD;
   --purple:#5B2E5C;
@@ -955,6 +956,30 @@ section {
 
 @media (prefers-reduced-motion: reduce) {
   .parallax img {
+    top: 0 !important;
+    height: 100% !important;
+    transform: none !important;
+  }
+}
+/* ---------- PARALLAX-FIXED UTILITY ---------- */
+/* Like .parallax but almost static — the image barely drifts (a small, one-directional nudge as the section scrolls past), closer to a position:fixed background feel. Separate class so individual sections can opt into either intensity. */
+.parallax-fixed {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.parallax-fixed img {
+  position: absolute !important;
+  left: 0 !important;
+  top: -4% !important;
+  width: 100% !important;
+  height: 108% !important;
+  object-fit: cover !important;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .parallax-fixed img {
     top: 0 !important;
     height: 100% !important;
     transform: none !important;
