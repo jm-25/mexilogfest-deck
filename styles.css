@@ -297,12 +297,15 @@ section {
 }
 
 .vh-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px 64px;
+  column-count: 2;
+  column-gap: 64px;
   max-width: 1000px;
   margin: 36px auto 0;
   text-align: left;
+}
+.vh-grid p {
+  margin: 0 0 8px;
+  break-inside: avoid;
 }
 .vh-grid a {
   color: var(--pink);
@@ -312,7 +315,7 @@ section {
 
 @media (max-width: 640px) {
   .vh-grid {
-    grid-template-columns: 1fr;
+    column-count: 1;
   }
 }
 /* ---------- SOCIAL STATS (keep similar on tablet) ---------- */
@@ -357,9 +360,6 @@ section {
   gap: 24px;
   margin-bottom: 36px;
 }
-.stat-row.two {
-  grid-template-columns: repeat(2, 1fr);
-}
 
 .stat {
   text-align: center;
@@ -382,7 +382,7 @@ section {
   .stats .photo {
     aspect-ratio: 16/9;
   }
-  .stat-row, .stat-row.two {
+  .stat-row {
     grid-template-columns: 1fr 1fr;
   }
 }
@@ -418,11 +418,14 @@ section {
 }
 
 .infl-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px 24px;
+  column-count: 4;
+  column-gap: 24px;
   max-width: 1200px;
   margin: 0 auto;
+}
+.infl-grid p {
+  margin: 0 0 8px;
+  break-inside: avoid;
 }
 .infl-grid a {
   color: inherit;
@@ -431,12 +434,12 @@ section {
 
 @media (max-width: 1024px) {
   .infl-grid {
-    grid-template-columns: repeat(2, 1fr);
+    column-count: 2;
   }
 }
 @media (max-width: 640px) {
   .infl-grid {
-    grid-template-columns: 1fr;
+    column-count: 1;
   }
 }
 /* ---------- PRESS HIGHLIGHTS (keep similar on tablet) ---------- */
@@ -468,14 +471,15 @@ section {
 }
 
 .press-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px 48px;
+  column-count: 2;
+  column-gap: 48px;
   margin-bottom: 28px;
 }
 .press-grid p {
   position: relative;
   padding-left: 16px;
+  margin: 0 0 8px;
+  break-inside: avoid;
 }
 .press-grid p::before {
   content: "";
@@ -516,7 +520,7 @@ section {
     aspect-ratio: 16/9;
   }
   .press-grid {
-    grid-template-columns: 1fr;
+    column-count: 1;
   }
 }
 /* ---------- FESTIVAL ACTIVITIES (3/2/1) ---------- */
@@ -746,6 +750,14 @@ section {
 .sponsors {
   padding: 56px 32px 0px;
 }
+@media (min-width: 1025px) {
+  .sponsors {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
 .sponsors h2 {
   text-align: center;
   color: var(--purple-dark);
@@ -799,6 +811,8 @@ section {
   min-height: 40px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .sp-body-wrap {
@@ -875,19 +889,24 @@ section {
 }
 
 .sp-footer {
-  margin-top: 50px;
+  margin-top: 24px;
   margin-bottom: 50px;
   width: 100vw;
   margin-left: calc(50% - 50vw);
   background: var(--pink);
   color: var(--paper);
   text-align: center;
-  padding: 14px 24px;
+  padding: 20px 24px;
   font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 .sp-footer .label {
   color: var(--yellow);
   font-weight: 800;
+  margin-bottom: 4px;
 }
 
 @media (max-width: 1024px) {
