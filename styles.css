@@ -518,6 +518,9 @@ section {
   text-decoration: underline;
   margin-right: 24px;
 }
+.press-archive a:last-child {
+  margin-right: 0;
+}
 
 @media (max-width: 640px) {
   .press {

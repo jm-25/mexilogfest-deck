@@ -540,6 +540,9 @@ section {
     text-decoration:underline;
     margin-right:24px;
   }
+  a:last-child {
+    margin-right:0;
+  }
 }
 
 @media (max-width:640px) {
