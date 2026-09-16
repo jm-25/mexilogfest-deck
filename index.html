@@ -421,11 +421,15 @@
   var firstCard = section.querySelector('.sp-card');
   var desktopQuery = window.matchMedia('(min-width:1025px)');
 
-  function checkOverflow() {
+  var DEFAULT_MAX_HEIGHT = 260; // matches the CSS default for .sp-body
+
+  // Compares scrollHeight against the just-set target height (not the live clientHeight,
+  // which races the CSS max-height transition and can briefly report a mid-animation value)
+  function checkOverflow(limit) {
     wraps.forEach(function(wrap) {
       if (wrap.classList.contains('expanded')) { return; }
       var body = wrap.querySelector('.sp-body');
-      var fits = body.scrollHeight <= body.clientHeight + 1;
+      var fits = body.scrollHeight <= limit + 1;
       wrap.classList.toggle('no-overflow', fits);
     });
   }
@@ -433,7 +437,7 @@
   function sizeBenefitsBox() {
     if (!desktopQuery.matches || !firstCard) {
       wraps.forEach(function(wrap) { wrap.querySelector('.sp-body').style.maxHeight = ''; });
-      checkOverflow();
+      checkOverflow(DEFAULT_MAX_HEIGHT);
       return;
     }
     var head = firstCard.querySelector('.sp-head');
@@ -456,7 +460,7 @@
     wraps.forEach(function(wrap) {
       wrap.querySelector('.sp-body').style.maxHeight = available + 'px';
     });
-    checkOverflow();
+    checkOverflow(available);
   }
 
   wraps.forEach(function(wrap) {
