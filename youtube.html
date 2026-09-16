@@ -22,6 +22,19 @@
     line-height:1.5;
   }
   .sandbox-note code { background:#00000010; padding:1px 5px; border-radius:4px; }
+
+  /* Fix under test: hide the video (fallback photo shows through) until playback has been
+     confirmed stable for a settle period. YouTube's own intro chrome (title, big pause
+     button, branding) stays visible for several seconds AFTER the PLAYING event fires, and
+     re-appears on every fresh (re)start — initial load, tab-refocus resume, loop restart —
+     not just the first one. So this re-arms on every non-playing state, not just once. */
+  .hero-video-bg {
+    opacity:0;
+    transition:opacity .5s ease;
+  }
+  .hero-video-bg.is-settled {
+    opacity:1;
+  }
 </style>
 </head>
 <body>
@@ -48,22 +61,62 @@
   </div>
 </section>
 
-<!-- HERO BACKGROUND VIDEO: seamless loop via YouTube's JS API, driven explicitly from onReady so mute/play/loop don't depend on URL-parameter autoplay timing -->
+<!-- HERO BACKGROUND VIDEO: settle-gated reveal. See the .hero-video-bg comment above for why. -->
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 function onYouTubeIframeAPIReady() {
-  new YT.Player('heroVideoPlayer', {
+  var wrap = document.querySelector('.hero-video-bg');
+  var SETTLE_MS = 5000;
+  var settleTimer = null;
+
+  function log(msg) {
+    if (window.console) { console.log('[yt-sandbox] ' + msg); }
+  }
+
+  function armSettle() {
+    clearTimeout(settleTimer);
+    log('armSettle: hiding, waiting ' + SETTLE_MS + 'ms');
+    if (wrap) { wrap.classList.remove('is-settled'); }
+    settleTimer = setTimeout(function() {
+      log('settle timer fired -> revealing');
+      if (wrap) { wrap.classList.add('is-settled'); }
+    }, SETTLE_MS);
+  }
+
+  function hideNow(reason) {
+    clearTimeout(settleTimer);
+    log('hideNow: ' + reason);
+    if (wrap) { wrap.classList.remove('is-settled'); }
+  }
+
+  var player = new YT.Player('heroVideoPlayer', {
     events: {
       onReady: function(e) {
         e.target.mute();
         e.target.playVideo();
       },
       onStateChange: function(e) {
-        if (e.data === YT.PlayerState.ENDED) {
+        var state = e.data;
+        log('state change: ' + state);
+        if (state === YT.PlayerState.PLAYING) {
+          armSettle();
+        } else {
+          hideNow('state=' + state);
+        }
+        if (state === YT.PlayerState.ENDED) {
           e.target.seekTo(0);
           e.target.playVideo();
         }
       }
+    }
+  });
+
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+      hideNow('tab hidden');
+    } else if (player && typeof player.playVideo === 'function') {
+      log('tab visible again -> playVideo()');
+      player.playVideo();
     }
   });
 }
