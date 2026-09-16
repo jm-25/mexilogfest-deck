@@ -800,8 +800,15 @@ section {
   align-items: center;
 }
 
+.sp-body-wrap {
+  position: relative;
+}
+
 .sp-body {
   padding: 14px 14px 20px;
+  max-height: 260px;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
 }
 .sp-body ul {
   margin: 0;
@@ -816,6 +823,55 @@ section {
 .sp-body li span {
   color: var(--ink-soft);
   font-size: 90%;
+}
+
+.sp-body-wrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 36px;
+  height: 48px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--paper));
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.25s ease;
+}
+
+.sp-body-wrap.expanded .sp-body {
+  max-height: 2000px;
+}
+
+.sp-body-wrap.expanded::after {
+  opacity: 0;
+}
+
+.sp-body-wrap.no-overflow::after {
+  content: none;
+}
+
+.sp-toggle {
+  display: block;
+  width: 100%;
+  padding: 9px 12px;
+  border: none;
+  background: none;
+  color: var(--pink);
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.sp-toggle:hover,
+.sp-toggle:focus-visible {
+  color: var(--purple-dark);
+}
+
+.sp-body-wrap.no-overflow + .sp-toggle {
+  display: none;
 }
 
 .sp-footer {

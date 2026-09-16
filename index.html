@@ -244,7 +244,7 @@
     <div class="sp-card">
       <div class="sp-head" style="background:#3B1F3D;"><div class="tier">TITLED</div><div class="price">$30,000</div></div>
       <div class="sp-naming">Title-sponsor</div>
-      <div class="sp-body"><ul>
+      <div class="sp-body-wrap"><div class="sp-body"><ul>
         <li><b>ie. &ldquo;'Brand's Name' Mexi Log Fest 2027&rdquo;</b></li>
         <li><b>Full brand exclusivity</b></li>
         <li><b>Logo on all competitors' rashguards</b></li>
@@ -266,13 +266,14 @@
         <li><b>6&times;3 meters beach space.</b> <span>For sales, exhibition or brand promotion. No alcohol sales allowed.</span></li>
         <li><b>Logo on all items included in the MXLF swag bag.</b> <span>Brand is allowed to include its own product in the swag bag.</span></li>
         <li><b>Logo in Mexi Log Fest's 2027 official art design</b></li>
-      </ul></div>
+      </ul></div></div>
+      <button type="button" class="sp-toggle">View all benefits</button>
     </div>
 
     <div class="sp-card">
       <div class="sp-head" style="background:#522A54;"><div class="tier">PRESENTER</div><div class="price">$25,000</div></div>
       <div class="sp-naming">&ldquo;Presented By&rdquo;</div>
-      <div class="sp-body"><ul>
+      <div class="sp-body-wrap"><div class="sp-body"><ul>
         <li><b>ie. &ldquo;Mexi Log Fest 2027 presented by 'Brand's Name'&rdquo;</b></li>
         <li><b>Full brand exclusivity</b></li>
         <li><b>Logo on all competitors' rashguards</b></li>
@@ -290,13 +291,14 @@
         <li><b>6&times;3 meters beach space.</b> <span>For sales, exhibition or brand promotion. No alcohol sales allowed.</span></li>
         <li><b>Logo on all items included in the MXLF swag bag.</b> <span>Brand is allowed to include its own product in the swag bag.</span></li>
         <li><b>Logo in Mexi Log Fest's 2027 official art design</b></li>
-      </ul></div>
+      </ul></div></div>
+      <button type="button" class="sp-toggle">View all benefits</button>
     </div>
 
     <div class="sp-card">
       <div class="sp-head" style="background:#6B3870;"><div class="tier">GOLD</div><div class="price">$10,000</div></div>
       <div class="sp-naming">&nbsp;</div>
-      <div class="sp-body"><ul>
+      <div class="sp-body-wrap"><div class="sp-body"><ul>
         <li><b>Brand exclusivity</b></li>
         <li><b>Logo on all competitors' rashguards</b></li>
         <li><b>Logo on all daily recap videos</b></li>
@@ -314,13 +316,14 @@
         <li><b>Presenter's Announcements</b></li>
         <li><b>Official Event Poster</b></li>
         <li><b>Name on Webpage</b></li>
-      </ul></div>
+      </ul></div></div>
+      <button type="button" class="sp-toggle">View all benefits</button>
     </div>
 
     <div class="sp-card">
       <div class="sp-head" style="background:#85498D;"><div class="tier">SILVER</div><div class="price">$3,000</div></div>
       <div class="sp-naming">&nbsp;</div>
-      <div class="sp-body"><ul>
+      <div class="sp-body-wrap"><div class="sp-body"><ul>
         <li><b>Branding on judges tower, beach marshal's area &amp; stage</b></li>
         <li><b>Logo on beach flags</b></li>
         <li><b>Brand activation on the contest's site</b></li>
@@ -329,19 +332,21 @@
         <li><b>Presenter's Announcements</b></li>
         <li><b>Official Event Poster</b></li>
         <li><b>Name on Webpage</b></li>
-      </ul></div>
+      </ul></div></div>
+      <button type="button" class="sp-toggle">View all benefits</button>
     </div>
 
     <div class="sp-card">
       <div class="sp-head" style="background:#A05CAE;"><div class="tier">AMIGO</div><div class="price">$1,000</div></div>
       <div class="sp-naming">&nbsp;</div>
-      <div class="sp-body"><ul>
+      <div class="sp-body-wrap"><div class="sp-body"><ul>
         <li><b>3&times;3 meters beach space.</b> <span>For sales, exhibition or brand promotion. No alcohol sales allowed.</span></li>
         <li><b>Logo on Step &amp; Repeat</b></li>
         <li><b>Presenter's Announcements</b></li>
         <li><b>Official Event Poster</b></li>
         <li><b>Name on Webpage</b></li>
-      </ul></div>
+      </ul></div></div>
+      <button type="button" class="sp-toggle">View all benefits</button>
     </div>
 
   </div>
@@ -414,6 +419,35 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
   update();
+})();
+</script>
+
+<!-- SPONSOR PACKAGES: each card's benefit list is truncated with a fade; "View all benefits" expands it. Cards whose content already fits get the fade/button removed instead of a no-op toggle. -->
+<script>
+(function() {
+  var wraps = Array.prototype.slice.call(document.querySelectorAll('.sp-body-wrap'));
+  if (!wraps.length) { return; }
+
+  function checkOverflow() {
+    wraps.forEach(function(wrap) {
+      if (wrap.classList.contains('expanded')) { return; }
+      var body = wrap.querySelector('.sp-body');
+      var fits = body.scrollHeight <= body.clientHeight + 1;
+      wrap.classList.toggle('no-overflow', fits);
+    });
+  }
+
+  wraps.forEach(function(wrap) {
+    var toggle = wrap.nextElementSibling;
+    if (!toggle || !toggle.classList.contains('sp-toggle')) { return; }
+    toggle.addEventListener('click', function() {
+      var expanded = wrap.classList.toggle('expanded');
+      toggle.textContent = expanded ? 'Show less' : 'View all benefits';
+    });
+  });
+
+  checkOverflow();
+  window.addEventListener('resize', checkOverflow);
 })();
 </script>
 
