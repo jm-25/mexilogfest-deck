@@ -221,6 +221,12 @@
   <div class="photo slideshow" id="sayulitaSlideshow">
     <img src="assets/sayulita-drone-1.jpg" alt="Sayulita aerial coastline" class="active">
     <img src="assets/sayulita-drone-2.jpg" alt="Sayulita aerial coastline">
+    <button type="button" class="slide-arrow prev" aria-label="Previous photo">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 4l-8 8 8 8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button type="button" class="slide-arrow next" aria-label="Next photo">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
   </div>
   <div class="sep-v" style="left:55%; background:var(--purple);"></div>
   <div class="copy">
@@ -411,19 +417,46 @@
 })();
 </script>
 
-<!-- SAYULITA slideshow: crossfades between two images on an interval -->
+<!-- SAYULITA slideshow: crossfades between images on an interval, with arrow-click and touch-swipe navigation that resets the timer -->
 <script>
 (function(){
   var slideshow = document.getElementById('sayulitaSlideshow');
   if (!slideshow) return;
-  var imgs = slideshow.querySelectorAll('img');
+  var imgs = Array.prototype.slice.call(slideshow.querySelectorAll('img'));
   if (imgs.length < 2) return;
   var i = 0;
-  setInterval(function(){
+  var timer;
+
+  function show(next) {
     imgs[i].classList.remove('active');
-    i = (i + 1) % imgs.length;
+    i = (next + imgs.length) % imgs.length;
     imgs[i].classList.add('active');
-  }, 5000);
+  }
+
+  function restart() {
+    clearInterval(timer);
+    timer = setInterval(function(){ show(i + 1); }, 5000);
+  }
+
+  var prevBtn = slideshow.querySelector('.slide-arrow.prev');
+  var nextBtn = slideshow.querySelector('.slide-arrow.next');
+  if (prevBtn) { prevBtn.addEventListener('click', function(){ show(i - 1); restart(); }); }
+  if (nextBtn) { nextBtn.addEventListener('click', function(){ show(i + 1); restart(); }); }
+
+  var touchStartX = null;
+  slideshow.addEventListener('touchstart', function(e){
+    touchStartX = e.changedTouches[0].clientX;
+  }, { passive: true });
+  slideshow.addEventListener('touchend', function(e){
+    if (touchStartX === null) { return; }
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    touchStartX = null;
+    if (Math.abs(dx) < 30) { return; }
+    show(dx < 0 ? i + 1 : i - 1);
+    restart();
+  }, { passive: true });
+
+  restart();
 })();
 </script>
 
