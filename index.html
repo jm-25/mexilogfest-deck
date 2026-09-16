@@ -450,7 +450,7 @@
       var footerStyles = getComputedStyle(footer);
       used += parseFloat(footerStyles.marginTop) + parseFloat(footerStyles.marginBottom);
     }
-    used += 24; // rounding slack
+    used += 4; // rounding slack
 
     var available = Math.max(window.innerHeight - used, 120);
     wraps.forEach(function(wrap) {

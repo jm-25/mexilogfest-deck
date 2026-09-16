@@ -790,7 +790,6 @@ section {
     min-height:100vh;
     display:flex;
     flex-direction:column;
-    justify-content:center;
   }
   h2 {
     text-align:center;
@@ -923,22 +922,41 @@ section {
 
 .sp-footer {
   margin-top:24px;
-  margin-bottom:50px;
+  margin-bottom:0;
   width:100vw;
   margin-left:calc(50% - 50vw);
   background:var(--pink);
   color:var(--paper);
   text-align:center;
-  padding:20px 24px;
+  padding:14px 24px;
   font-weight:700;
   display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:4px;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:baseline;
+  column-gap:6px;
   .label {
     color:var(--yellow);
     font-weight:800;
-    margin-bottom:4px;
+  }
+  .sp-footer-item:not(:last-child)::after {
+    content:"\00B7";
+    margin-left:6px;
+    color:var(--paper);
+  }
+}
+
+@media (max-width:640px) {
+  .sp-footer {
+    flex-direction:column;
+    padding:20px 24px;
+    row-gap:4px;
+    .label {
+      margin-bottom:4px;
+    }
+    .sp-footer-item:not(:last-child)::after {
+      content:none;
+    }
   }
 }
 
