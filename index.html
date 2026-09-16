@@ -576,15 +576,43 @@
 })();
 </script>
 
-<!-- HERO BACKGROUND VIDEO: seamless loop via YouTube's JS API, driven explicitly from onReady so mute/play/loop don't depend on URL-parameter autoplay timing -->
+<!-- HERO BACKGROUND VIDEO: the iframe stays invisible (opacity:0, .hero-photo-fallback shows
+     through underneath) until a fixed reveal timer elapses. YouTube's own intro chrome
+     (title, big pause button, channel branding) stays visible for a few seconds after
+     playback genuinely starts, and re-appears on tab-refocus resume — this is NOT gated on
+     the JS API's onStateChange event, since that event bridge is unreliable (verified via
+     testing: the video can be confirmed playing while the event never reaches this page).
+     Timers: 5.5s for a cold load (measured — YouTube's chrome was still visible at 3.7s,
+     gone by 5.6s), 2.5s for a tab-refocus resume (the player is already warm, so the intro
+     chrome is expected to be brief, but this hasn't been measured against genuine
+     browser-throttled backgrounding — only logic-tested). Tested in isolation first at
+     https://deck.mexilogfest.com/youtube.html before porting here. -->
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 function onYouTubeIframeAPIReady() {
-  new YT.Player('heroVideoPlayer', {
+  var wrap = document.querySelector('.hero-video-bg');
+  var INITIAL_SETTLE_MS = 5500;
+  var RESUME_SETTLE_MS = 2500;
+  var revealTimer = null;
+
+  function hideNow() {
+    clearTimeout(revealTimer);
+    if (wrap) { wrap.classList.remove('is-settled'); }
+  }
+
+  function scheduleReveal(ms) {
+    clearTimeout(revealTimer);
+    revealTimer = setTimeout(function() {
+      if (wrap) { wrap.classList.add('is-settled'); }
+    }, ms);
+  }
+
+  var player = new YT.Player('heroVideoPlayer', {
     events: {
       onReady: function(e) {
         e.target.mute();
         e.target.playVideo();
+        scheduleReveal(INITIAL_SETTLE_MS);
       },
       onStateChange: function(e) {
         if (e.data === YT.PlayerState.ENDED) {
@@ -592,6 +620,15 @@ function onYouTubeIframeAPIReady() {
           e.target.playVideo();
         }
       }
+    }
+  });
+
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+      hideNow();
+    } else if (player && typeof player.playVideo === 'function') {
+      player.playVideo();
+      scheduleReveal(RESUME_SETTLE_MS);
     }
   });
 }

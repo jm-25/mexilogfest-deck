@@ -124,6 +124,11 @@ section {
   overflow: hidden;
   z-index: 1;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.hero-opening .hero-video-bg.is-settled {
+  opacity: 1;
 }
 .hero-opening .hero-video-bg iframe {
   position: absolute;
