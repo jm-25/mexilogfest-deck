@@ -1172,3 +1172,33 @@ section {
     height:36px;
   }
 }
+
+/* ---------- LANGUAGE SWITCHER ---------- */
+.lang-switch {
+  position:fixed;
+  top:16px;
+  right:16px;
+  z-index:200;
+  background:rgba(0,0,0,.4);
+  color:#fff;
+  font-family:"futura-pt",sans-serif;
+  font-weight:800;
+  font-size:13px;
+  letter-spacing:.5px;
+  padding:7px 14px;
+  border-radius:20px;
+  text-decoration:none;
+  transition:background .2s ease;
+}
+.lang-switch:hover,
+.lang-switch:focus-visible {
+  background:rgba(0,0,0,.65);
+}
+@media (max-width:640px) {
+  .lang-switch {
+    top:12px;
+    right:12px;
+    font-size:12px;
+    padding:6px 12px;
+  }
+}
