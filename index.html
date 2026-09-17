@@ -489,9 +489,16 @@
     });
   }
 
+  // On desktop this sets an inline max-height (to fit min-height:100vh) which, being inline,
+  // always wins over the ".expanded" CSS rule regardless of selector specificity — so expanded
+  // cards must be skipped here, or the toggle button would visibly change to "Show less" while
+  // the inline height silently kept the content clipped at the same collapsed size.
   function sizeBenefitsBox() {
     if (!desktopQuery.matches || !firstCard) {
-      wraps.forEach(function(wrap) { wrap.querySelector('.sp-body').style.maxHeight = ''; });
+      wraps.forEach(function(wrap) {
+        if (wrap.classList.contains('expanded')) { return; }
+        wrap.querySelector('.sp-body').style.maxHeight = '';
+      });
       checkOverflow(DEFAULT_MAX_HEIGHT);
       return;
     }
@@ -513,6 +520,7 @@
 
     var available = Math.max(window.innerHeight - used, 120);
     wraps.forEach(function(wrap) {
+      if (wrap.classList.contains('expanded')) { return; }
       wrap.querySelector('.sp-body').style.maxHeight = available + 'px';
     });
     checkOverflow(available);
@@ -524,6 +532,12 @@
     toggle.addEventListener('click', function() {
       var expanded = wrap.classList.toggle('expanded');
       toggle.textContent = expanded ? 'Show less' : 'View all benefits';
+      var body = wrap.querySelector('.sp-body');
+      if (expanded) {
+        body.style.maxHeight = 'none';
+      } else {
+        sizeBenefitsBox();
+      }
     });
   });
 
