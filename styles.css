@@ -815,6 +815,10 @@ section {
   font-size: 30px;
 }
 
+.price-currency {
+  font-size: 80%;
+}
+
 .sp-naming {
   background: var(--teal);
   color: var(--paper);
